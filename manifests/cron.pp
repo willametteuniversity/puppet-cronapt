@@ -1,21 +1,53 @@
+#
+# Class: apt::cron
+#
+# Configure the actions of cron-apt.
+#
+# Parameters:
+#   [*actions*] - list of cron-apt actions to enable.
+#
+# Sample Usage:
+#
+#   class { 'apt::cron' :
+#       actions => ['update', 'notify']
+#   }
+#
+class apt::cron (
+	$actions = $apt::params::cron_actions
+) inherits apt::params {
 
-class apt::cron {
+	#
+	# Install
+	#
+	package { "cron-apt" :
+		ensure => installed
+	}
 
-  include apt::cron::package
+	#
+	# Actions
+	#
+	if ('update' in $actions) {
+		file { "/etc/cron-apt/action.d/0-update" :
+			ensure  => "file",
+			source => "puppet:///modules/apt/update",
+			require => Package["cron-apt"],
+		}
+	}
 
-  file { "/etc/cron-apt/action.d/0-update" :
-    ensure  => absent,
-    require => Class["apt::cron::package"],
-  }
+	if ('download' in $actions) {
+		file { "/etc/cron-apt/action.d/3-download" :
+			ensure  => "file",
+			source => "puppet:///modules/apt/download",
+			require => Package["cron-apt"],
+		}
+	}
+
+	if ('notify' in $actions) {
+		file { "/etc/cron-apt/action.d/9-notify" :
+			ensure  => "file",
+			source => "puppet:///modules/apt/update",
+			require => Package["cron-apt"],
+		}
+	}
 
 }
-
-class apt::cron::package {
-  
-  package { "cron-apt" :
-    ensure => installed
-  }
-
-}
-
-
