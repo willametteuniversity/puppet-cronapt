@@ -1,4 +1,6 @@
-class apt::params {
+class cronapt::params {
+
+	$packages = ['cron-apt']
 
 	# The email address to send mail to.
 	$cron_mail = 'root'
@@ -12,6 +14,7 @@ class apt::params {
 	#                (else never send mail)
 	$cron_mail_on = 'error'
 
+	# Which actions (files in this module) to enable
 	$cron_actions = ['update', 'notify']
 
 }

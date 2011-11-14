@@ -1,10 +1,4 @@
-Puppet Module for APT
-=====================
+Puppet Module for cron-apt
+==========================
 
-This is a Puppet module to manage APT and related configuration.
-
-It currently supports just installs cron-apt and configures it to
-download and report, but not install, updates.
-
-In the future it will support configuring APT repositories and 
-similar stuff.
+This is a Puppet module to install and configure cron-apt.

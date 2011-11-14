@@ -1,5 +1,5 @@
 #
-# Class: apt::cron
+# Class: cronapt::configure
 #
 # Configure the actions of cron-apt.
 #
@@ -10,24 +10,17 @@
 #
 # Sample Usage:
 #
-#   class { 'apt::cron' :
+#   class { 'cronapt::configure' :
 #       actions => ['update', 'notify'],
 #       mail => 'root',
 #       mail_on => 'error',
 #   }
 #
-class apt::cron (
-	$actions = $apt::params::cron_actions,
-	$mail = $apt::params::cron_mail,
-	$mail_on = $apt::params::cron_mail_on
-) inherits apt::params {
-
-	#
-	# Install
-	#
-	package { "cron-apt" :
-		ensure => installed
-	}
+class cronapt::configure (
+	$actions = $cronapt::params::cron_actions,
+	$mail = $cronapt::params::cron_mail,
+	$mail_on = $cronapt::params::cron_mail_on
+) inherits cronapt::params {
 
 	#
 	# Configure
@@ -40,13 +33,13 @@ class apt::cron (
 		'always'  => 'always',
 		default   => 'always',
 	}
-	augeas { "cron_apt-mail_config" :
+	augeas { "cronapt-mail_config" :
 		context => "/files/etc/cron-apt/config",
 		changes => [
 			"set MAILON $mail_on_value",
 			"set MAILTO $mail",
 		],
-		require => Package['cron-apt'],
+		require => Class["cronapt::install"],
 	}
 
 	#
@@ -55,25 +48,27 @@ class apt::cron (
 	if ('update' in $actions) {
 		file { "/etc/cron-apt/action.d/0-update" :
 			ensure  => "file",
-			source => "puppet:///modules/apt/update",
-			require => Package["cron-apt"],
+			source => "puppet:///modules/cronapt/update",
+			require => Class["cronapt::install"],
 		}
 	}
 
 	if ('download' in $actions) {
 		file { "/etc/cron-apt/action.d/3-download" :
 			ensure  => "file",
-			source => "puppet:///modules/apt/download",
-			require => Package["cron-apt"],
+			source => "puppet:///modules/cronapt/download",
+			require => Class["cronapt::install"],
 		}
 	}
 
 	if ('notify' in $actions) {
 		file { "/etc/cron-apt/action.d/9-notify" :
 			ensure  => "file",
-			source => "puppet:///modules/apt/update",
-			require => Package["cron-apt"],
+			source => "puppet:///modules/cronapt/update",
+			require => Class["cronapt::install"],
 		}
 	}
 
+	include cronapt::install
+	Class['cronapt::install'] -> Class['cronapt::configure']
 }
