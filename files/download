@@ -1,2 +1,2 @@
-autoclean -y
-dist-upgrade -d -y -o APT::Get::Show-Upgraded=true
+autoclean -qq -y
+dist-upgrade -qq -d -y -o APT::Get::Show-Upgraded=true
