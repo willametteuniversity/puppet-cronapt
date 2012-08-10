@@ -64,7 +64,7 @@ class cronapt::configure (
 	if ('notify' in $actions) {
 		file { "/etc/cron-apt/action.d/9-notify" :
 			ensure  => "file",
-			source => "puppet:///modules/cronapt/update",
+			source => "puppet:///modules/cronapt/notify",
 			require => Class["cronapt::install"],
 		}
 	}
