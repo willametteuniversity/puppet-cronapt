@@ -1,0 +1,31 @@
+{
+  "name": "puppet-cronapt",
+  "version": "1.0.0",
+  "author": "Mark Niedzielski",
+  "summary": "Configures the Debian package 'cron-apt' to automatically control package updates via apt.",
+  "license": "FSF",
+  "source": "http://github.com/MNiedzielski/puppet-cronapt",
+  "project_page": "https://github.com/MNiedzielski/puppet-cronapt",
+  "issues_url": "https://github.com/MNiedzielski/puppet-cronapt/issues",
+  "tags": ["packages", "apt"],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [ "6", "7", "8" ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "12.04", "14.04" ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement":"3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ]
+}
