@@ -11,14 +11,14 @@
 # Sample Usage:
 #
 #   class { 'cronapt::configure' :
-#       actions => ['update', 'notify'],
-#       mail => 'root',
+#       actions => ['update', 'upgrade', 'notify'],
+#       mail    => 'root',
 #       mail_on => 'error',
 #   }
 #
 class cronapt::configure (
 	$actions = $cronapt::params::cron_actions,
-	$mail = $cronapt::params::cron_mail,
+	$mail    = $cronapt::params::cron_mail,
 	$mail_on = $cronapt::params::cron_mail_on
 ) inherits cronapt::params {
 
@@ -34,12 +34,12 @@ class cronapt::configure (
 		default   => 'always',
 	}
 	augeas { "cronapt-mail_config" :
-		context => "/files/etc/cron-apt/config",
-		changes => [
+		context   => "/files/etc/cron-apt/config",
+		changes   => [
 			"set MAILON $mail_on_value",
 			"set MAILTO $mail",
 		],
-		require => Class["cronapt::install"],
+		require   => Class["cronapt::install"],
 	}
 
 	#
@@ -48,7 +48,7 @@ class cronapt::configure (
 	if ('update' in $actions) {
 		file { "/etc/cron-apt/action.d/0-update" :
 			ensure  => "file",
-			source => "puppet:///modules/cronapt/update",
+			source  => "puppet:///modules/cronapt/update",
 			require => Class["cronapt::install"],
 		}
 	}
@@ -56,7 +56,15 @@ class cronapt::configure (
 	if ('download' in $actions) {
 		file { "/etc/cron-apt/action.d/3-download" :
 			ensure  => "file",
-			source => "puppet:///modules/cronapt/download",
+			source  => "puppet:///modules/cronapt/download",
+			require => Class["cronapt::install"],
+		}
+	}
+
+	if ('upgrade' in $actions) {
+		file { "/etc/cron-apt/action.d/5-upgrade" :
+			ensure  => "file",
+			source  => "puppet:///modules/cronapt/upgrade",
 			require => Class["cronapt::install"],
 		}
 	}
@@ -64,7 +72,7 @@ class cronapt::configure (
 	if ('notify' in $actions) {
 		file { "/etc/cron-apt/action.d/9-notify" :
 			ensure  => "file",
-			source => "puppet:///modules/cronapt/notify",
+			source  => "puppet:///modules/cronapt/notify",
 			require => Class["cronapt::install"],
 		}
 	}
