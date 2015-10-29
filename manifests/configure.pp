@@ -53,6 +53,14 @@ class cronapt::configure (
 		}
 	}
 
+	if ('download' in $actions) {
+		file { "/etc/cron-apt/action.d/3-download" :
+			ensure  => "file",
+			source  => "puppet:///modules/cronapt/download",
+			require => Class["cronapt::install"],
+		}
+	}
+
 	if ('upgrade' in $actions) {
 		file { "/etc/cron-apt/action.d/5-upgrade" :
 			ensure  => "file",
