@@ -1,6 +1,6 @@
 {
   "name": "puppet-cronapt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Mark Niedzielski",
   "summary": "Configures the Debian package 'cron-apt' to automatically control package updates via apt.",
   "license": "FSF",
