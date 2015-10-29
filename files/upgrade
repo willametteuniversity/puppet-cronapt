@@ -1,1 +1,2 @@
-upgrade -o quiet=2
+autoclean -qq -y
+dist-upgrade -qq -d -y -o APT::Get::Show-Upgraded=true

@@ -15,6 +15,6 @@ class cronapt::params {
 	$cron_mail_on = 'error'
 
 	# Which actions (files in this module) to enable
-	$cron_actions = ['update', 'notify']
+	$cron_actions = ['update', 'upgrade', 'notify']
 
 }
