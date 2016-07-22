@@ -1,5 +1,6 @@
 #
 class cronapt::params {
+    $ensure   = 'present'
     $packages = ['cron-apt']
 
     # The email address to send mail to.
