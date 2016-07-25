@@ -7,8 +7,8 @@ class cronapt::install (
 
     # Install
     package { $packages :
-        ensure => $cronapt::params::ensure ? {
-                    'present' => 'installed',
+        ensure => $cronapt::params::absent ? {
+                    false     => 'installed',
                     default   => 'absent',
                   }
     }
