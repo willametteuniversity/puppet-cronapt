@@ -3,28 +3,10 @@
 #
 # Configure the actions of cron-apt.
 #
-# Parameters:
-#   [*actions*] - list of cron-apt actions to enable.
-#   [*mail*]    - where to send email notifications.
-#   [*mail_on*] - when to send email notifications.
-#
-# Sample Usage:
-#
-#   class { 'cronapt::configure' :
-#       actions => ['update', 'upgrade', 'notify'],
-#       mail    => 'root',
-#       mail_on => 'error',
-#   }
-#
-class cronapt::configure (
-    $actions = $cronapt::params::cron_actions,
-    $mail    = $cronapt::params::cron_mail,
-    $mail_on = $cronapt::params::cron_mail_on
-    ) inherits cronapt::params {
-    #
-    # Configure
-    #
-    $mail_on_value = $mail_on ? {
+class cronapt::configure {
+
+    # Configuration
+    $mail_on_value = $cronapt::mail_on ? {
         'error'    => 'error',
         'upgrade'  => 'upgrade',
         'changes'  => 'changes',
@@ -36,15 +18,13 @@ class cronapt::configure (
         context => '/files/etc/cron-apt/config',
         changes => [
                       "set MAILON ${mail_on_value}",
-                      "set MAILTO ${mail}",
+                      "set MAILTO ${cronapt::mail}",
                       ],
         require => Class['cronapt::install'],
     }
-    
-    #
+
     # Actions
-    #
-    if ('update' in $actions) {
+    if ('update' in $cronapt::actions) {
         file { '/etc/cron-apt/action.d/0-update' :
             ensure  => 'file',
             source  => 'puppet:///modules/cronapt/update',
@@ -52,7 +32,7 @@ class cronapt::configure (
         }
     }
     
-    if ('download' in $actions) {
+    if ('download' in $cronapt::actions) {
         file { '/etc/cron-apt/action.d/3-download' :
             ensure  => 'file',
             source  => 'puppet:///modules/cronapt/download',
@@ -60,7 +40,7 @@ class cronapt::configure (
         }
     }
     
-    if ('upgrade' in $actions) {
+    if ('upgrade' in $cronapt::actions) {
         file { '/etc/cron-apt/action.d/5-upgrade' :
             ensure  => 'file',
             source  => 'puppet:///modules/cronapt/upgrade',
@@ -68,14 +48,11 @@ class cronapt::configure (
         }
     }
     
-    if ('notify' in $actions) {
+    if ('notify' in $cronapt::actions) {
         file { '/etc/cron-apt/action.d/9-notify' :
             ensure  => 'file',
             source  => 'puppet:///modules/cronapt/notify',
             require => Class['cronapt::install'],
         }
     }
-    
-    include cronapt::install
-    Class['cronapt::install'] -> Class['cronapt::configure']
 }

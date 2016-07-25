@@ -1,10 +1,12 @@
 #
+# Class: cronapt::params
+#
 class cronapt::params {
-    $absent   = false
-    $packages = ['cron-apt']
+    $cronapt_absent   = false
+    $packages         = ['cron-apt']
 
     # The email address to send mail to.
-    $cron_mail = 'root'
+    $cron_mail        = 'root'
 
     # When to send email about the cron-apt results.
     # Value: error   (send mail on error runs)
@@ -13,8 +15,8 @@ class cronapt::params {
     #        output  (send mail when output is generated)
     #        always  (always send mail)
     #                (else never send mail)
-    $cron_mail_on = 'error'
+    $cron_mail_on     = 'error'
 
     # Which actions (files in this module) to enable
-    $cron_actions = ['update', 'upgrade', 'notify']
+    $cron_actions     = ['update', 'upgrade', 'notify']
 }
